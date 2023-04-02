@@ -11,6 +11,7 @@ struct Homepage: View {
     var body: some View {
         VStack {
             Text("Welcome to")
+                .padding(.top)
             Text("Finance Wizard")
                 .font(.title)
                 .fontWeight(.bold)

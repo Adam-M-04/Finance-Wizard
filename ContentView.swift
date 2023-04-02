@@ -1,30 +1,40 @@
 import SwiftUI
+import UIKit
 
 struct ContentView: View {
     @State var currentPageIndex: Int = 0
     
     var body: some View {
         ZStack {
-            RadialGradient(
-                gradient: Gradient(colors: [.blue, .black]),
-                center: .center,
-                startRadius: 2,
-                endRadius: 650)
-            .ignoresSafeArea()
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                RadialGradient(
+                    gradient: Gradient(colors: [.blue, .black]),
+                    center: .center,
+                    startRadius: 5,
+                    endRadius: 1000)
+                    .ignoresSafeArea()
+            } else {
+                RadialGradient(
+                    gradient: Gradient(colors: [.blue, .black]),
+                    center: .center,
+                    startRadius: 1,
+                    endRadius: 650)
+                    .ignoresSafeArea()
+            }
             
             VStack {
-                Spacer()
-                
-                switch currentPageIndex {
-                case 1:
-                    Stats()
-                case 2:
-                    Inflation()
-                default:
-                    Homepage()
+                ScrollView {
+                    switch currentPageIndex {
+                        case 1:
+                            Stats()
+                        case 2:
+                            Saving()
+                        case 3:
+                            Inflation()
+                        default:
+                            Homepage()
+                    }
                 }
-                
-                Spacer()
                 
                 HStack {
                     Button("<") {
@@ -46,5 +56,11 @@ struct ContentView: View {
             }
             .foregroundColor(.white)
         }
+    }
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
     }
 }
