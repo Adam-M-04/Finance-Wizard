@@ -15,7 +15,7 @@ struct Stats: View {
         "Only 28% of Americans could survive three months on their emergency savings"]
     
     var body: some View {
-        VStack {
+        ScrollView {
             Text("Savings")
                 .font(.title)
                 .fontWeight(.bold)
@@ -58,7 +58,8 @@ struct Stats: View {
             .padding(.horizontal)
             .padding(.bottom)
             
-            SwiftChart(data: data, title: "Percent of Americans with savings in a specified range", type: .bar, unit: "%")
+            SwiftChartHorizontal(data: data, title: "Percent of Americans with savings in a specified range", unit: "%", ColorScheme: .dark, barColors: [.white])
+                .padding(.bottom, 40)
         }
     }
 }

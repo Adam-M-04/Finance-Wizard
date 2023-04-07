@@ -28,14 +28,21 @@ struct Saving: View {
                 .multilineTextAlignment(.center)
                 .padding()
             
-            Button ("Record your expenses") {
-                
+            Text("The 50/30/20 rule suggests that you allocate 50% of your budget for your essential needs, 30% for your personal wants, and reserve 20% for your savings.")
+                .font(.title3)
+                .fontWeight(.light)
+                .multilineTextAlignment(.center)
+                .padding()
+            
+            if #available(iOS 16.0, *) {
+                NavigationLink (destination: ExpensesTracking()) {
+                    Text("Track your expenses ->")
+                        .navigationBarTitle("")
+                        .navigationBarHidden(true)
+                }
+            } else {
+                // Fallback on earlier versions
             }
-            .buttonStyle(.bordered)
-            .tint(.black)
-            .padding()
-            
-            
         }
     }
 }

@@ -12,3 +12,15 @@ struct DataStruct: Identifiable {
     var description: String
     var value: Double
 }
+
+struct DataStructureVertical: Identifiable {
+    var id = UUID()
+    var description: Date
+    var value: Double
+}
+
+struct DataStructureVerticalDouble: Identifiable {
+    var id = UUID()
+    var description: String
+    var value: [DataStructureVertical]
+}
