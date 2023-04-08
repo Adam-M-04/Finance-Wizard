@@ -1,7 +1,8 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var currentPageIndex: Int = 0
+    @State var currentPageIndex: Int = 1
+    @State var timer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
     
     var body: some View {
         if #available(iOS 16.0, *) {
@@ -10,11 +11,11 @@ struct ContentView: View {
                     GradientBackground()
                         .ignoresSafeArea()
                     
-                    TabView {
-                        Homepage()
-                        Stats()
-                        Saving()
-                        Investing()
+                    TabView (selection: $currentPageIndex) {
+                        Homepage(currentTab: $currentPageIndex, timer: $timer).tag(1)
+                        Stats().tag(2)
+                        Saving().tag(3)
+                        Investing().tag(4)
                     }
                     .foregroundColor(.white)
                     .tabViewStyle(.page)

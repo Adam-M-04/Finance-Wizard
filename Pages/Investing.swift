@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct Investing: View {
+    @State private var action: Int? = 0
     private let steps: [String] = [
         "Determine your financial goals and risk tolerance.",
         "Educate yourself about the different types of investments available, such as stocks, bonds, and mutual funds.",
@@ -51,11 +52,16 @@ struct Investing: View {
             .padding(.top, 2)
             
             if #available(iOS 16.0, *) {
-                NavigationLink (destination: InvestingSimulation()) {
-                    Text("Simulation ->")
-                        .navigationBarTitle("")
-                        .navigationBarHidden(true)
+                NavigationLink (destination: InvestingSimulation(), tag: 1, selection: $action) {
+                    
                 }
+                
+                Button("Simulation") {
+                    self.action = 1
+                }
+                .buttonStyle(.borderedProminent)
+                .padding(.top)
+                .padding(.bottom, 50)
             }
         }
     }

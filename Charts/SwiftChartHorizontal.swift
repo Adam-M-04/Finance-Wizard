@@ -9,10 +9,11 @@ import SwiftUI
 import Charts
 
 struct SwiftChartHorizontal: View {
+    @Environment(\.colorScheme) var colorScheme
     let data: [DataStruct]
     let title: String
     let unit: String
-    let ColorScheme: ColorScheme
+    let lightOnly: Bool
     let barColors: [Color]
         
     var body: some View {
@@ -23,7 +24,7 @@ struct SwiftChartHorizontal: View {
                         .font(.title2)
                         .multilineTextAlignment(.center)
                         .padding(.top)
-                        .foregroundColor(ColorScheme == .light ? .black : .white)
+                        .foregroundColor(.white)
                 }
                 Chart {
                     ForEach(data, id: \.id) { barData in
@@ -35,7 +36,8 @@ struct SwiftChartHorizontal: View {
                             Text(String(format: "%.0f", barData.value) + unit)
                             .font(.caption)
                         }
-                        .accessibilityLabel("Description: \(barData.description), value: \(barData.value)")
+                        .accessibilityLabel("\(barData.description)")
+                        .accessibilityValue("\(barData.value)")
                         .foregroundStyle(
                             .linearGradient(
                                 colors: barColors,
@@ -48,7 +50,7 @@ struct SwiftChartHorizontal: View {
                 }
                 .frame(height: 300)
                 .padding(.horizontal)
-                .colorScheme(ColorScheme)
+                .colorScheme(lightOnly ? .dark : colorScheme)
             }
         }
         else {
@@ -61,6 +63,6 @@ struct SwiftChartHorizontal: View {
 
 struct SwiftChartHorizontal_Previews: PreviewProvider {
     static var previews: some View {
-        SwiftChartHorizontal(data: [], title: "", unit: "", ColorScheme: .dark, barColors: [.white])
+        SwiftChartHorizontal(data: [], title: "", unit: "", lightOnly: false, barColors: [.white])
     }
 }

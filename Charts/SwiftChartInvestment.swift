@@ -9,13 +9,9 @@ import SwiftUI
 import Charts
 
 struct SwiftChartInvestment: View {
-    //@State var selectedElement: DataStructureVertical?
-    //@State var selectedBaseElement: DataStructureVertical?
     @Binding var selectedElementIndex: Int?
     let data: [DataStructureVertical]
     let baseData: [DataStructureVertical]
-    let unit: String
-    let ColorScheme: ColorScheme
     let barColors: [Color]
         
     var body: some View {
@@ -32,14 +28,14 @@ struct SwiftChartInvestment: View {
                             x: .value("Description", barData.description),
                             y: .value("Value", barData.value)
                         )
-                        .accessibilityLabel("Description: \(barData.description), value: \(barData.value)")
+                        .accessibilityLabel("\(barData.description)")
+                        .accessibilityValue("$\(barData.value)")
                         .foregroundStyle(
                             by: .value("data", chartData.name)
                         )
                     }
                 }
                 .frame(height: 300)
-                .colorScheme(ColorScheme)
                 .chartYAxisLabel("Investment value [$]")
                 .chartYAxis {
                   AxisMarks(values: .automatic) { _ in

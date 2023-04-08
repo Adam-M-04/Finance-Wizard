@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 struct InputListRow: View {
+    @Environment(\.colorScheme) var colorScheme
     @Binding public var inputValueBinding: Int
     @State public var inputValue: Int = 0
     let text: String
@@ -21,6 +22,7 @@ struct InputListRow: View {
             Text(text + ":")
             Spacer()
             TextField("", value: $inputValue, format: .number)
+                .foregroundColor(colorScheme == .dark ? .white : .black)
                 .textFieldStyle(.roundedBorder)
                 .frame(width: 100)
                 .multilineTextAlignment(.trailing)
@@ -38,7 +40,7 @@ struct InputListRow: View {
                 .frame(minWidth: 20)
         }
         .padding(.vertical, 1.1)
-        .foregroundColor(.black)
+        .foregroundColor(colorScheme == .dark ? .white : .black)
         .onAppear {
             inputValue = inputValueBinding
         }

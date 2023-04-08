@@ -10,6 +10,7 @@ import UIKit
 
 @available(iOS 16.0, *)
 struct ExpensesTracking: View {
+    @Environment(\.colorScheme) var colorScheme
     @State private var income = 0
     @State private var expenses = [
         ExpenseObject(Name: "Housing", Value: 0),
@@ -40,7 +41,7 @@ struct ExpensesTracking: View {
                 }
                 
                 Section (header: Text("What do you spend the most on?")) {
-                    SwiftChartHorizontal(data: getChartData(), title: "", unit: "%", ColorScheme: .light, barColors: [.green, .yellow, .red])
+                    SwiftChartHorizontal(data: getChartData(), title: "", unit: "%", lightOnly: false, barColors: [.green, .yellow, .red])
                         .padding(.vertical, 2)
                 }
                 
@@ -53,17 +54,17 @@ struct ExpensesTracking: View {
                             .foregroundColor(determineColor())
                     }
                     .padding(.vertical, 8)
-                    .foregroundColor(.black)
+                    .foregroundColor(colorScheme == .dark ? .white : .black)
                     
                     VStack {
                         Text(getSummaryText())
-                            .foregroundColor(.black)
+                            .foregroundColor(colorScheme == .dark ? .white : .black)
                             .font(.callout)
                             .multilineTextAlignment(.leading)
+                            .lineLimit(nil)
+                            .frame(minHeight: 50, maxHeight: .infinity)
                     }
                 }
-                
-                
             }
             .scrollContentBackground(.hidden)
             .foregroundColor(.white)

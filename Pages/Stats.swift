@@ -28,11 +28,6 @@ struct Stats: View {
                 .multilineTextAlignment(.center)
                 .padding()
             
-            // Bootstrap Icon ("https://icons.getbootstrap.com/icons/piggy-bank/")
-            Image("piggy-bank")
-                .resizable()
-                .frame(width: 128, height: 128)
-            
             Text("Saving money not only helps you to reach your goals, but also enables you to build a financial safety net, giving you peace of mind and greater financial stability.")
                 .font(.title3)
                 .fontWeight(.light)
@@ -58,7 +53,7 @@ struct Stats: View {
             .padding(.horizontal)
             .padding(.bottom)
             
-            SwiftChartHorizontal(data: data, title: "Percent of Americans with savings in a specified range", unit: "%", ColorScheme: .dark, barColors: [.white])
+            SwiftChartHorizontal(data: data, title: "Percent of Americans with savings in a specified range", unit: "%", lightOnly: true, barColors: [.white])
                 .padding(.bottom, 40)
         }
     }

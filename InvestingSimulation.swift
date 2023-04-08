@@ -43,7 +43,7 @@ struct InvestingSimulation: View {
                 }
                 
                 Section (header: Text("Simulation")) {
-                    SwiftChartInvestment(selectedElementIndex: $selectedElementIndex, data: getChartData(), baseData: getBaseChartData(), unit: "$", ColorScheme: .light, barColors: [.blue, .red])
+                    SwiftChartInvestment(selectedElementIndex: $selectedElementIndex, data: getChartData(), baseData: getBaseChartData(), barColors: [.blue, .red])
                         .padding(.vertical, 2)
                         .animation(.easeInOut(duration: 0.5), value: timespan)
                 }
@@ -64,7 +64,6 @@ struct InvestingSimulation: View {
                         Text("$\(Int(chartData.last!.value + chartBaseData.last!.value))")
                             .font(.callout)
                     }
-                    .foregroundColor(.black)
                     
                     HStack {
                         Text("Investment gains:")
@@ -74,7 +73,6 @@ struct InvestingSimulation: View {
                             .font(.callout)
                             .foregroundColor(.green)
                     }
-                    .foregroundColor(.black)
                     
                     HStack {
                         Text("About return rates:")
@@ -120,13 +118,10 @@ struct InvestingSimulation: View {
                         .padding()
                         .presentationDetents([.medium])
                     }
-                    .foregroundColor(.black)
                 }
                 
             }
             .scrollContentBackground(.hidden)
-            .foregroundColor(.white)
-            .preferredColorScheme(.light)
         }
         .onTapGesture {
             self.hideKeyboard()
