@@ -14,6 +14,8 @@ struct Stats: View {
         "A considerable 10% of Americans have no savings at all",
         "Only 28% of Americans could survive three months on their emergency savings"]
     
+    let bgOpacity: Double
+    
     var body: some View {
         ScrollView {
             Text("Savings")
@@ -28,7 +30,11 @@ struct Stats: View {
                 .multilineTextAlignment(.center)
                 .padding()
             
-            Text("Saving money not only helps you to reach your goals, but also enables you to build a financial safety net, giving you peace of mind and greater financial stability.")
+            Text("🤔")
+                .font(.system(size: 80))
+                .padding(-10)
+            
+            Text("Saving money not only helps you achieve your goals, but also allows you to build a financial safety net, giving you peace of mind and greater financial stability.")
                 .font(.title3)
                 .fontWeight(.light)
                 .multilineTextAlignment(.center)
@@ -51,16 +57,14 @@ struct Stats: View {
                 }
             }
             .padding(.horizontal)
-            .padding(.bottom)
-            
-            SwiftChartHorizontal(data: data, title: "Percent of Americans with savings in a specified range", unit: "%", lightOnly: true, barColors: [.white])
-                .padding(.bottom, 40)
+            .padding(.bottom, 40)
         }
+        .opacity(bgOpacity)
     }
 }
 
 struct Stats_Previews: PreviewProvider {
     static var previews: some View {
-        Stats()
+        Stats(bgOpacity: 1)
     }
 }

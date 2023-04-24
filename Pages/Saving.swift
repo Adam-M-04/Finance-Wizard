@@ -8,8 +8,11 @@
 import SwiftUI
 
 struct Saving: View {
+    @State private var navAction: Int? = 0
+    let bgOpacity: Double
+    
     var body: some View {
-        VStack {
+        ScrollView {
             Text("How to start saving")
                 .font(.title)
                 .fontWeight(.bold)
@@ -22,33 +25,38 @@ struct Saving: View {
                 .multilineTextAlignment(.center)
                 .padding()
             
-            Text("By tracking your expenses, you can identify areas where you may be overspending and make adjustments to your budget accordingly.")
-                .font(.title3)
-                .fontWeight(.light)
-                .multilineTextAlignment(.center)
-                .padding()
+            Text("💰")
+                .font(.system(size: 80))
+                .padding(-10)
             
-            Text("The 50/30/20 rule suggests that you allocate 50% of your budget for your essential needs, 30% for your personal wants, and reserve 20% for your savings.")
+            Text("By tracking your spendings, you can identify areas where you may be overspending and make adjustments to your budget accordingly.")
                 .font(.title3)
                 .fontWeight(.light)
                 .multilineTextAlignment(.center)
                 .padding()
             
             if #available(iOS 16.0, *) {
-                NavigationLink (destination: ExpensesTracking()) {
-                    Text("Track your expenses ->")
-                        .navigationBarTitle("")
-                        .navigationBarHidden(true)
+                NavigationLink (destination: ExpensesTracking(), tag: 1, selection: $navAction) {}
+                
+                Button("Track your expenses \(Image(systemName: "dollarsign.circle.fill"))") {
+                    self.navAction = 1
                 }
-            } else {
-                // Fallback on earlier versions
+                .buttonStyle(.borderedProminent)
+                .padding(.vertical)
             }
+            
+            Text("The 50/30/20 rule suggests that you allocate 50% of your budget for your essential needs, 30% for your personal wants, and reserve 20% for your savings.")
+                .font(.title3)
+                .fontWeight(.light)
+                .multilineTextAlignment(.center)
+                .padding()
         }
+        .opacity(bgOpacity)
     }
 }
 
 struct Saving_Previews: PreviewProvider {
     static var previews: some View {
-        Saving()
+        Saving(bgOpacity: 1)
     }
 }

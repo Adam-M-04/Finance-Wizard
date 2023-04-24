@@ -8,10 +8,9 @@
 import SwiftUI
 import Charts
 
-struct SwiftChartHorizontal: View {
+struct SwiftChartExpenses: View {
     @Environment(\.colorScheme) var colorScheme
     let data: [DataStruct]
-    let title: String
     let unit: String
     let lightOnly: Bool
     let barColors: [Color]
@@ -19,13 +18,6 @@ struct SwiftChartHorizontal: View {
     var body: some View {
         if #available(iOS 16.0, *) {
             VStack {
-                if (title.count > 0) {
-                    Text(title)
-                        .font(.title2)
-                        .multilineTextAlignment(.center)
-                        .padding(.top)
-                        .foregroundColor(.white)
-                }
                 Chart {
                     ForEach(data, id: \.id) { barData in
                         BarMark(
@@ -58,11 +50,5 @@ struct SwiftChartHorizontal: View {
                 .font(.title)
         }
         
-    }
-}
-
-struct SwiftChartHorizontal_Previews: PreviewProvider {
-    static var previews: some View {
-        SwiftChartHorizontal(data: [], title: "", unit: "", lightOnly: false, barColors: [.white])
     }
 }

@@ -36,13 +36,13 @@ struct SwiftChartStock: View {
                     
                     Text(String(format: "$%.2f", priceDiff))
                         .font(.caption)
-                        .animation(.linear)
+                        .animation(.linear, value: priceDiff)
                         .foregroundColor(priceDiff < 0 ? .red : .green)
                     Text(String(format: "$%.2f", price))
                         .font(.title2)
                         .fontWeight(.semibold)
                         .multilineTextAlignment(.leading)
-                        .animation(.linear)
+                        .animation(.linear, value: price)
                 }
                 .padding(.bottom, -5)
                 
@@ -67,9 +67,7 @@ struct SwiftChartStock: View {
                             chartColor
                         )
                         .alignsMarkStylesWithPlotArea()
-                        
                     }
-                    
                 }
                 .clipShape(Rectangle())
                 .frame(height: 250)

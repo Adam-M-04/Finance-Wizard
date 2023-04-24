@@ -10,20 +10,34 @@ import SwiftUI
 @available(iOS 16.0, *)
 struct InvestingSimulation: View {
     @State private var monthlyInvestment = 100
-    @State private var returnRate = 6
+    @State private var returnRate = 10
     @State private var timespan = 5
     @State private var selectedElementIndex: Int?
     @State private var showingBottomSheet = false
+    @State private var renderedChartImage: Image?
     
     var body: some View {
         ZStack {
             GradientBackground()
                 .ignoresSafeArea()
+                .toolbar {
+                    if let renderedChartImage {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            ShareLink(item: renderedChartImage, preview: SharePreview("Investment simulation", image: renderedChartImage))
+                        }
+                    }
+                }
             
             List {
-                Section(header: Text("Parameters")) {
+                Section(header: Text("Parameters").foregroundColor(.white)) {
                     InputListRow(inputValueBinding: self.$monthlyInvestment, text: "Monthly investment", unit: "$", maxVal: 20000, minVal: 1)
+                        .onChange(of: monthlyInvestment) { newVal in
+                            renderChartImage(delay: 0.2)
+                        }
                     InputListRow(inputValueBinding: self.$returnRate, text: "Annual return rate", unit: "%", maxVal: 50, minVal: 1)
+                        .onChange(of: returnRate) { newVal in
+                            renderChartImage(delay: 0.2)
+                        }
                     
                     Picker("Investment letngth", selection: $timespan) {
                         Text("5 years").tag(5)
@@ -35,20 +49,24 @@ struct InvestingSimulation: View {
                     .padding(.vertical, 5)
                     .onChange(of: timespan) { newValue in
                         withAnimation(.easeInOut(duration: 0.5)) {
-                            timespan = 40
                             timespan = newValue
                             selectedElementIndex = nil
                         }
+                        renderChartImage(delay: 0.5)
                     }
                 }
                 
-                Section (header: Text("Simulation")) {
+                Section (header: Text("Simulation").foregroundColor(.white)) {
                     SwiftChartInvestment(selectedElementIndex: $selectedElementIndex, data: getChartData(), baseData: getBaseChartData(), barColors: [.blue, .red])
                         .padding(.vertical, 2)
                         .animation(.easeInOut(duration: 0.5), value: timespan)
+                        .onAppear {
+                            renderChartImage(delay: 0)
+                        }
                 }
                 
-                Section(header: Text("Summary")) {
+                
+                Section(header: Text("Summary").foregroundColor(.white)) {
                     let data = [
                         (name: "Idle money in bank", data: getBaseChartData()),
                         (name: "Invested money", data: getChartData())
@@ -60,9 +78,11 @@ struct InvestingSimulation: View {
                     HStack {
                         Text("Savings after \(timespan) years:")
                             .font(.callout)
+                            .animation(.linear)
                         Spacer()
                         Text("$\(Int(chartData.last!.value + chartBaseData.last!.value))")
                             .font(.callout)
+                            .animation(.linear)
                     }
                     
                     HStack {
@@ -72,51 +92,39 @@ struct InvestingSimulation: View {
                         Text("$\(Int(chartData.last!.value))")
                             .font(.callout)
                             .foregroundColor(.green)
+                            .animation(.linear)
                     }
                     
                     HStack {
                         Text("About return rates:")
                             .font(.callout)
+                            .foregroundColor(.blue)
                         Spacer()
                         Image(systemName: "info.circle")
+                            .foregroundColor(.blue)
                     }
                     .onTapGesture {
                         showingBottomSheet.toggle()
                     }
                     .sheet(isPresented: $showingBottomSheet) {
                         VStack (alignment: .leading) {
-                            Text("Return rates are a significant variable in investing, but for the purpose of calculations, we can consider the following average return rates:")
-                            VStack (alignment: .leading) {
-                                HStack {
-                                    Text("•")
-                                        .font(.title)
-                                    Text("Long-term government bonds:")
-                                        .font(.body)
-                                    Text("5% - 6%")
-                                        .font(.body)
-                                        .fontWeight(.bold)
-                                    Spacer()
-                                }
-                                HStack {
-                                    Text("•")
-                                        .font(.title)
-                                    Text("Large stocks from stock market:")
-                                        .font(.body)
-                                    Text("~10%")
-                                        .font(.body)
-                                        .fontWeight(.bold)
-                                    Spacer()
-                                }
-                                .padding(.bottom, 5)
-                            }
+                            Text("Annual return rates")
+                                .font(.title)
+                                .padding(.bottom)
                             
-                            Text("For example, the price returns of the S&P 500 over the last 100 years have been approximately 10.3%.")
+                            Text("Return rates are a significant variable in investing, but for the purpose of calculations, we can assume an average of 10% rate of return when investing in the stock market.")
+                                .padding(.bottom)
+                                //.frame(minHeight: 120)
+                            
+                            Text("For example, the average annual returns of the S&P 500 over the last 100 years have been approximately 10.3%.")
                                 .padding(.bottom)
                             
                             Text("S&P 500 is a stock market index tracking the stock performance of 500 of the largest companies listed on stock exchanges in the United States.")
+                                .foregroundColor(.secondary)
+                                .italic()
                         }
                         .padding()
-                        .presentationDetents([.medium])
+                        .presentationDetents([.height(500)])
                     }
                 }
                 
@@ -171,6 +179,55 @@ struct InvestingSimulation: View {
     
     func calculateBaseInvestmentValue(year: Int) -> Int {
         return monthlyInvestment * 12 * year
+    }
+    
+    func renderChartImage(delay: Double) -> Void {
+        let data = getChartData()
+        let baseData = getBaseChartData()
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+            let view = VStack {
+                Text("Investment simulation")
+                    .font(.title)
+                    .multilineTextAlignment(.center)
+                    .padding(.top)
+                Text("(Monthly: $\(monthlyInvestment) / Return reate: \(returnRate)%)")
+                    .font(.callout)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+                
+                SwiftChartInvestment(selectedElementIndex: $selectedElementIndex, data: getChartData(), baseData: getBaseChartData(), barColors: [.blue, .red])
+                        .frame(width: 400)
+                        .padding()
+                
+                HStack {
+                    Text("Savings after \(timespan) years:")
+                        .font(.callout)
+                    Spacer()
+                    Text("$\(Int( data.last!.value + baseData.last!.value))")
+                        .font(.callout)
+                }
+                .padding(.horizontal)
+                .padding(.bottom, 2)
+                HStack {
+                    Text("Investment gains:")
+                        .font(.callout)
+                    Spacer()
+                    Text("$\(Int(data.last!.value))")
+                        .font(.callout)
+                        .foregroundColor(.green)
+                }
+                .padding(.horizontal)
+                .padding(.bottom)
+            }
+                .background(Color.white)
+                
+            let renderer = ImageRenderer(content: view)
+            renderer.scale = 2
+            if let image = renderer.cgImage {
+                renderedChartImage = Image(decorative: image, scale: 1.0)
+            }
+        }
     }
 }
 

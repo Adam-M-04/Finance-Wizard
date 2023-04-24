@@ -13,12 +13,15 @@ struct Homepage: View {
     @Binding var currentTab: Int
     @Binding var timer: Publishers.Autoconnect<Timer.TimerPublisher>
     
+    let bgOpacity: Double
+    
     var body: some View {
-        VStack {
+        ScrollView {
             VStack {
                 Text("💸")
                     .font(.system(size: 100))
-                    .padding(-10)
+                    .padding(.top, 40)
+                    .padding(.bottom, -10)
             
                 Text("Welcome to")
                     .padding(.top)
@@ -37,12 +40,11 @@ struct Homepage: View {
                 .padding(.horizontal, 20)
                 .colorScheme(.dark)
         }
+        .opacity(bgOpacity)
         .onReceive(timer) { _ in
             if (currentTab == 1) {
-                withAnimation(.easeInOut(duration: 0.5)) {
-                    stockData.append(randomData())
-                    stockData.remove(at: 0)
-                }
+                stockData.append(randomData())
+                stockData.remove(at: 0)
             }
         }
     }
